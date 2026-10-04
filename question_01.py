@@ -43,3 +43,33 @@ purchase_data_df = spark.createDataFrame(purchase_data,purchase_schema)
 display(purchase_data_df)
 display(product_data_df)
 
+#Question1.1 Find the customers who have bought only iphone13?
+only_iphone13 = (purchase_data_df.groupBy("customer")
+    .agg(F.collect_set("product_model").alias("products"))
+    .filter((F.size("products") == 1) & (F.array_contains("products", "iphone13")))
+    .select("customer")
+)
+display(only_iphone13)
+
+#Question 1.2 Find customers who upgraded from product iphone13 to product iphone14 ?
+iphone_buyers = purchase_data_df.filter(F.col("product_model").isin("iphone13", "iphone14"))
+
+upgraded = (
+    iphone_buyers.groupBy("customer")
+    .agg(F.collect_set("product_model").alias("iphone_models"))
+    .filter(F.array_contains("iphone_models", "iphone13") & F.array_contains("iphone_models", "iphone14"))
+    .select("customer")
+)
+display(upgraded)
+
+#Question 1.3 Find customers who have bought all models in the new Product Data?
+total_products = product_data_df.distinct().count()
+
+customers_all_models = (
+    purchase_data_df.groupBy("customer")
+    .agg(F.countDistinct("product_model").alias("distinct_models"))
+    .filter(F.col("distinct_models") == total_products)
+    .select("customer")
+)
+display(customers_all_models)
+
