@@ -1,6 +1,6 @@
 from pyspark.sql import functions as F
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import explode
+from pyspark.sql.functions import explode, explode_outer, posexplode
 import re
 from pyspark.sql.types import (
     StructType,
@@ -114,8 +114,57 @@ print(
     flattened_count - original_count
 )
 
+#questiob4.4 Differentiate the difference using explode, explode outer, posexplode functions
 
-#Question4.5 Filter id = 0001
+# EXPLODE()
+explode_df = employee_df.select(
+    "id",
+    "properties.name",
+    "properties.storeSize",
+    explode("employees").alias("employee")
+)
+
+explode_df.show(truncate=False)
+
+print(
+    "Explode Record Count:",
+    explode_df.count()
+)
+
+# EXPLODE OUTER()
+
+explode_outer_df = employee_df.select(
+    "id",
+    "properties.name",
+    "properties.storeSize",
+    explode_outer("employees").alias("employee")
+)
+
+explode_outer_df.show(truncate=False)
+
+print(
+    "Explode Outer Record Count:",
+    explode_outer_df.count()
+)
+
+
+# POSEXPLODE()
+
+posexplode_df = employee_df.select(
+    "id",
+    "properties.name",
+    "properties.storeSize",
+    posexplode("employees").alias("position", "employee")
+)
+posexplode_df.show(truncate=False)
+
+print(
+    "PosExplode Record Count:",
+    posexplode_df.count()
+)
+
+
+#Question4.5 Filter the id which is equal to 0001
 
 filtered_df = flattened_df.filter(
     F.col("id") == 1001
@@ -167,7 +216,6 @@ CREATE DATABASE IF NOT EXISTS employee
 (
     filtered_df.write
     .mode("overwrite")
-    .format("json")
     .partitionBy(
         "year",
         "month",
