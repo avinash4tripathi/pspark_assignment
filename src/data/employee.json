@@ -1,0 +1,3 @@
+{"id": "0001", "name": "John Doe", "address": {"city": "New York", "state": "NY"}, "skills": ["Python", "Spark", "SQL"]}
+{"id": "0002", "name": "Jane Smith", "address": {"city": "San Francisco", "state": "CA"}, "skills": ["Java", "Scala"]}
+{"id": "0003", "name": "Bob Johnson", "address": {"city": "Chicago", "state": "IL"}, "skills": ["Python", "AWS"]}
