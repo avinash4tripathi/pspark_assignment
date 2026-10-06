@@ -94,3 +94,4 @@ def test_mask_card_function():
 
     assert mask_card("1234567891234567") == "************4567"
     assert mask_card("987654321098") == "********1098"
+
