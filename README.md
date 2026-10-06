@@ -72,3 +72,7 @@ src/
 ## How to Run
 
 Run each `question_XX.py` file in a Databricks notebook or a Spark-enabled environment. Some questions reference data stored in Databricks Volumes (`/Volumes/workspace/default/employee_data/`).
+
+## Tests
+
+The `test/` folder contains pytest test suites for the assignment questions.
